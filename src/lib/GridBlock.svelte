@@ -46,34 +46,39 @@
 <style>
     .grid-block {
         width: 100%;
+    }
+    #grid-0 {
         background: linear-gradient(135deg,
         rgba(var(--tick1),var(--tick2),var(--tick3),1) 0%,
         rgba(var(--tick3),var(--tick1),var(--tick2),1) 50%,
         rgba(var(--tick2),var(--tick3),var(--tick1),1) 100%);
     }
-    #grid-0 {
-    }
     #grid-1 {
-
+        background: linear-gradient(0deg,
+        rgba(var(--tick2),var(--tick3),var(--tick1),1) 0%,
+        rgba(var(--tick3),var(--tick1),var(--tick2),1) 125%);
     }
     #grid-2 {
-
+        background: linear-gradient(45deg,
+        rgba(var(--tick2),var(--tick3),var(--tick1),1) 0%,
+        rgba(var(--tick3),var(--tick1),var(--tick2),1) 50%,
+        rgba(var(--tick1),var(--tick2),var(--tick3),1) 100%);
     }
     #grid-3 {
-
+        background: linear-gradient(-135deg,
+        rgba(var(--tick2),var(--tick3),var(--tick1),1) 0%,
+        rgba(var(--tick3),var(--tick1),var(--tick2),1) 50%,
+        rgba(var(--tick1),var(--tick2),var(--tick3),1) 100%);
     }
     #grid-4 {
+        background: linear-gradient(180deg,
+        rgba(var(--tick2),var(--tick3),var(--tick1),1) 0%,
+        rgba(var(--tick3),var(--tick1),var(--tick2),1) 125%);
     }
     #grid-5 {
-
-    }
-    #grid-6 {
-
-    }
-    #grid-7 {
-
-    }
-    #grid-8 {
-
+        background: linear-gradient(-45deg,
+        rgba(var(--tick1),var(--tick2),var(--tick3),1) 0%,
+        rgba(var(--tick3),var(--tick1),var(--tick2),1) 50%,
+        rgba(var(--tick2),var(--tick3),var(--tick1),1) 100%);
     }
 </style>
