@@ -1,6 +1,5 @@
 <script type="module" lang="ts">
 import Clock from "./lib/Clock.svelte";
-import BackgroundGrid from "./lib/BackgroundGrid.svelte";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import * as Three from "three";
 import {onMount} from "svelte";
