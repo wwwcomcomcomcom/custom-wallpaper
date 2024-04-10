@@ -29,7 +29,26 @@ onMount(()=>{
         let tick = 0;
         function animate() {
             requestAnimationFrame(animate);
-            model.scene.rotation.y += Math.PI/100;
+            model.scene.rotation.x += Math.PI/100;
+            model.scene.position.z += 0.5;
+            if(model.scene.position.z > 60) {
+                model.scene.position.z = -200;
+            }
+            renderer.render(scene,camera);
+        }
+        animate();
+    });
+    loader.load("/chicken-model/scene.gltf",(model) => {
+        scene.add(model.scene);
+        model.scene.position.z = -130;
+        let tick = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            model.scene.rotation.x += Math.PI/100;
+            model.scene.position.z += 0.5;
+            if(model.scene.position.z > 60) {
+                model.scene.position.z = -200;
+            }
             renderer.render(scene,camera);
         }
         animate();
