@@ -4,6 +4,30 @@ import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import * as Three from "three";
 import {onMount} from "svelte";
 
+function addChicken(positionZ:number,scene:Three.Scene,renderer:Three.WebGLRenderer, camera:Three.PerspectiveCamera) {
+    const loader = new GLTFLoader();
+    loader.load("/chicken-model/scene.gltf",(model) => {
+        scene.add(model.scene);
+        model.scene.position.z = positionZ;
+        model.scene.rotation.y = positionZ/260*2*Math.PI;
+        let tick = (positionZ+200)/260*60;
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // model.scene.rotation.x += Math.PI/70;
+            model.scene.rotation.y += Math.PI/50;
+            model.scene.position.z += 0.7;
+            // model.scene.position.x += Math.sin(Math.PI/30*tick++)/2;
+            if(tick >= 60) tick = 0;
+            if(model.scene.position.z > 60) {
+                model.scene.position.z = -200;
+            }
+            renderer.render(scene,camera);
+        }
+        animate();
+    });
+}
+
 let canvas:HTMLCanvasElement;
 onMount(()=>{
     let scene = new Three.Scene();
@@ -17,41 +41,24 @@ onMount(()=>{
     camera.position.set(0,50,100);
     camera.lookAt(0,0,0);
 
-    scene.background = new Three.Color(0xffffff);
+    // const material = new Three.MeshBasicMaterial();
+    // material.color = new Three.Color(0xff55aa);
+    // const geometry = new Three.BoxGeometry(200,1,200);
+    // const cube = new Three.Mesh(geometry,material);
+    // cube.position.set(0,-10,0);
+    // scene.add(cube);
+
+    scene.background = new Three.Color(0xff55aa);
     let light = new Three.DirectionalLight(0xffffff,3);
     light.position.set(0,50,100);
     scene.add(light);
 
-    const loader = new GLTFLoader();
-    loader.load("/chicken-model/scene.gltf",(model) => {
-        scene.add(model.scene);
-        let tick = 0;
-        function animate() {
-            requestAnimationFrame(animate);
-            model.scene.rotation.x += Math.PI/100;
-            model.scene.position.z += 0.5;
-            if(model.scene.position.z > 60) {
-                model.scene.position.z = -200;
-            }
-            renderer.render(scene,camera);
-        }
-        animate();
-    });
-    loader.load("/chicken-model/scene.gltf",(model) => {
-        scene.add(model.scene);
-        model.scene.position.z = -130;
-        let tick = 0;
-        function animate() {
-            requestAnimationFrame(animate);
-            model.scene.rotation.x += Math.PI/100;
-            model.scene.position.z += 0.5;
-            if(model.scene.position.z > 60) {
-                model.scene.position.z = -200;
-            }
-            renderer.render(scene,camera);
-        }
-        animate();
-    });
+    // -200 ~ 60
+    const positionGap = 260/4;
+    for(let i = -200; i < 60; i+=positionGap) {
+        addChicken(i,scene,renderer,camera);
+    }
+    console.log(window.innerWidth,window.innerHeight);
 });
 
 </script>
@@ -66,10 +73,12 @@ onMount(()=>{
     main {
         height: 100%;
         width: 100%;
+        background-color: #ff55aa;
     }
     #canvas {
         display: block;
-        width: 100vw;
-        height: 100vh;
+
+        width: 100%;
+        height: 100%;
     }
 </style>
