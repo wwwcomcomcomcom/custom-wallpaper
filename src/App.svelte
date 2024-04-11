@@ -1,6 +1,6 @@
 <script type="module" lang="ts">
 import Clock from "./lib/Clock.svelte";
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+import {type GLTF, GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import * as Three from "three";
 import {onMount} from "svelte";
 
@@ -28,8 +28,15 @@ function addChicken(positionZ:number,scene:Three.Scene,renderer:Three.WebGLRende
     });
 }
 
+function loadChicken() {
+    return new Promise<GLTF>((resolve,reject) => {
+        const loader = new GLTFLoader();
+        loader.load("/chicken-model/scene.gltf",model => resolve(model),null,reject);
+    });
+}
+
 let canvas:HTMLCanvasElement;
-onMount(()=>{
+onMount(async ()=>{
     let scene = new Three.Scene();
     let renderer = new Three.WebGLRenderer({
         canvas: canvas!,
@@ -54,11 +61,30 @@ onMount(()=>{
     scene.add(light);
 
     // -200 ~ 60
+    // for(let i = -200; i < 60; i+=positionGap) {
+    //     addChicken(i,scene,renderer,camera);
+    // }
     const positionGap = 260/4;
+    let chickens:GLTF[] = [];
     for(let i = -200; i < 60; i+=positionGap) {
-        addChicken(i,scene,renderer,camera);
+        chickens.push(await loadChicken());
     }
-    console.log(window.innerWidth,window.innerHeight);
+    chickens.forEach((chicken,i) => {
+        const positionZ = i*positionGap - 200;
+        chicken.scene.position.z = positionZ;
+        chicken.scene.rotation.y = positionZ/260*2*Math.PI;
+        scene.add(chicken.scene);
+        function animate() {
+            requestAnimationFrame(animate);
+            chicken.scene.rotation.y += Math.PI/50;
+            chicken.scene.position.z += 0.7;
+            if(chicken.scene.position.z > 60) {
+                chicken.scene.position.z = -200;
+            }
+            renderer.render(scene,camera);
+        }
+        animate();
+    });
 });
 
 </script>
@@ -77,7 +103,6 @@ onMount(()=>{
     }
     #canvas {
         display: block;
-
         width: 100%;
         height: 100%;
     }
