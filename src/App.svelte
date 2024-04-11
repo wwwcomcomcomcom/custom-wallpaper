@@ -60,31 +60,37 @@ onMount(async ()=>{
     light.position.set(0,50,100);
     scene.add(light);
 
-    // -200 ~ 60
-    // for(let i = -200; i < 60; i+=positionGap) {
-    //     addChicken(i,scene,renderer,camera);
-    // }
-    const positionGap = 260/4;
-    let chickens:GLTF[] = [];
-    for(let i = -200; i < 60; i+=positionGap) {
-        chickens.push(await loadModel("/chicken-model/scene.gltf"));
-    }
-    chickens.forEach((chicken,i) => {
-        const positionZ = i*positionGap - 200;
-        chicken.scene.position.z = positionZ;
-        chicken.scene.rotation.y = positionZ/260*2*Math.PI;
-        scene.add(chicken.scene);
-        function animate() {
-            requestAnimationFrame(animate);
-            chicken.scene.rotation.y += Math.PI/50;
-            chicken.scene.position.z += 0.7;
-            if(chicken.scene.position.z > 60) {
-                chicken.scene.position.z = -200;
-            }
-            renderer.render(scene,camera);
+    const positionGap = 260/10;
+    let chickens:GLTF[][] = [];
+
+    for(let j = 0; j < 5; j++) {
+        const temp = [];
+        for(let i = -200; i < 60; i+=positionGap) {
+            temp.push(await loadModel("/chicken-model/scene.gltf"));
         }
-        animate();
-    });
+        chickens.push(temp);
+    }
+    let line = -30;
+    chickens.forEach((chickens) => {
+        chickens.forEach((chicken,i) => {
+            const positionZ = i*positionGap - 200;
+            chicken.scene.position.x = line;
+            chicken.scene.position.z = positionZ;
+            chicken.scene.rotation.y = positionZ/260*2*Math.PI;
+            scene.add(chicken.scene);
+            function animate() {
+                requestAnimationFrame(animate);
+                chicken.scene.rotation.y += Math.PI/50;
+                chicken.scene.position.z += 0.7;
+                if(chicken.scene.position.z > 60) {
+                    chicken.scene.position.z = -200;
+                }
+                renderer.render(scene,camera);
+            }
+            animate();
+        });
+        line += 15;
+    })
 });
 
 </script>
