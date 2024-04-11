@@ -60,7 +60,7 @@
         light.position.set(0,50,100);
         scene.add(light);
 
-        const positionGap = 260/10;
+        const positionGap = 260/3;
         let chickens:GLTF[][] = [];
 
         for(let j = 0; j < 5; j++) {
