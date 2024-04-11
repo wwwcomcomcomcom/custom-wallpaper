@@ -28,10 +28,10 @@ function addChicken(positionZ:number,scene:Three.Scene,renderer:Three.WebGLRende
     });
 }
 
-function loadChicken() {
+function loadModel(modelPath:sting) {
     return new Promise<GLTF>((resolve,reject) => {
         const loader = new GLTFLoader();
-        loader.load("/chicken-model/scene.gltf",model => resolve(model),null,reject);
+        loader.load(modelPath,model => resolve(model),null,reject);
     });
 }
 
@@ -67,7 +67,7 @@ onMount(async ()=>{
     const positionGap = 260/4;
     let chickens:GLTF[] = [];
     for(let i = -200; i < 60; i+=positionGap) {
-        chickens.push(await loadChicken());
+        chickens.push(await loadModel("/chicken-model/scene.gltf"));
     }
     chickens.forEach((chicken,i) => {
         const positionZ = i*positionGap - 200;
